@@ -1,0 +1,26 @@
+<!-- HTML5 -->
+<!DOCTYPE html>
+<!-- XML namespace -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Collaborator list</title>
+</head>
+<body>
+<!-- Table -->
+<!-- The <tr> element defines a table row, the <th> element defines a table header, and the <td> element defines a table cell.-->
+<table border="1">
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+      </tr>
+      <tr th:each="user : ${Users}">
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.email}"></td>
+        <td><a th:href="@{/ao/edit/{id}(id=${user.id})}">Edit</a></td>  
+   		<td><a th:href="@{/ao/delete/{id}(id=${user.id})}">Delete</a></td>  
+       </tr>
+    </table>
+ <p align="center"><a th:href="@{/}"><b>back to Main menu</b></a><font size="+2"><b><br></br></b></font></p>
+</body>
+</html>
