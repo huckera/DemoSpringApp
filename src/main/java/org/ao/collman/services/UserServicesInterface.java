@@ -12,7 +12,7 @@ public interface UserServicesInterface {
 	
 	public String addNewUser(String name, String email, Model model); 
 	
-	public Iterable<User> getAllUsers(Model model); 
+	public Iterable<User> getAllUsers();
 	
 	public Optional<User> findById(Integer id);
 

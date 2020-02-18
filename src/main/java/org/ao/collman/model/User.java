@@ -10,7 +10,8 @@ import javax.persistence.Table;
 		// parameter "name" assigns the logical name
 @Table(name = "Collaborator") // Sets the table name (default table name is the POJO class name)
 public class User {
-    @Id
+
+	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
@@ -53,5 +54,9 @@ public class User {
 		this.email = email;
 	}
 
+	@Override
+	public String toString() {
+		return "Collaborator [id=" + id + ", name=" + name + ", email=" + email + "]";
+	}
 
 }

@@ -23,7 +23,7 @@ public class UserServicesImpl implements UserServicesInterface {
 		return "Saved";
 	}
 	
-	public Iterable<User> getAllUsers(Model model) {
+	public Iterable<User> getAllUsers() {
 		return userRepository.findAll();
 		
 	}
