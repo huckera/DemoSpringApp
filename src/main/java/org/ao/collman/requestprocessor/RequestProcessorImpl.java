@@ -1,7 +1,7 @@
 package org.ao.collman.requestprocessor;
 
-import org.ao.collman.model.User;
-import org.ao.collman.services.UserServicesInterface;
+import org.ao.collman.model.dto.Collaborator;
+import org.ao.collman.services.CollaboratorServiceInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ public class RequestProcessorImpl implements RequestProcessorInterface {
 	private static final Logger log = LoggerFactory.getLogger(RequestProcessorImpl.class);
 
 	@Autowired // find automatically the bean
-	private UserServicesInterface userI;
+	private CollaboratorServiceInterface userI;
 
 	@Override
 	public void deleteCollaborator(Integer userId) {
@@ -22,30 +22,30 @@ public class RequestProcessorImpl implements RequestProcessorInterface {
 
 	}
 
-	public Iterable<User> listAllCollaborators() {
+	@Override
+	public Iterable<Collaborator> listAllCollaborators() {
 
-		Iterable<User> users = userI.getAllUsers();
+		Iterable<Collaborator> users = userI.getAllUsers();
 		return users;
 
 	}
 
-	public void addCollaborator(User user) {
+	@Override
+	public void addCollaborator(Collaborator user) {
 		userI.save(user);
 		log.info("Collaborator saved into the database: " + user.toString());
 	}
 
 	@Override
-	public User getCollaboratorById(Integer id) {
-		User user = userI.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid student Id:" + id));
+	public Collaborator getCollaboratorById(Integer id) {
+		Collaborator user = userI.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid student Id:" + id));
 		return user;
 	}
 
 	@Override
-	public void updateCollaborator(User user) {
+	public void updateCollaborator(Collaborator user) {
 		// TODO Auto-generated method stub
 
 	}
-	
-
 
 }

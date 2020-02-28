@@ -14,11 +14,11 @@
         <th>Name</th>
         <th>Email</th>
       </tr>
-      <tr th:each="user : ${Users}">
-        <td th:text="${user.name}"></td>
-        <td th:text="${user.email}"></td>
-        <td><a th:href="@{/ao/update/{id}(id=${user.id})}">Edit</a></td>  
-   		<td><a th:href="@{/ao/delete/{id}(id=${user.id})}">Delete</a></td>  
+      <tr th:each="collaborator : ${Collaborators}">
+        <td th:text="${collaborator.name}"></td>
+        <td th:text="${collaborator.email}"></td>
+        <td><a th:href="@{/ao/update/{id}(id=${collaborator.id})}">Edit</a></td>  
+   		<td><a th:href="@{/ao/delete/{id}(id=${collaborator.id})}">Delete</a></td>  
        </tr>
     </table>
  <p align="center"><a th:href="@{/}"><b>back to Main menu</b></a><font size="+2"><b><br></br></b></font></p>

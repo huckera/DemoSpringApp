@@ -1,17 +1,17 @@
 package org.ao.collman.requestprocessor;
 
-import org.ao.collman.model.User;
+import org.ao.collman.model.dto.Collaborator;
 
 
 public interface RequestProcessorInterface {
 
-	public User getCollaboratorById(Integer id);
+	public Collaborator getCollaboratorById(Integer id);
 
-	public Iterable<User> listAllCollaborators();
+	public Iterable<Collaborator> listAllCollaborators();
 
-	public void updateCollaborator(User user);
+	public void updateCollaborator(Collaborator user);
 
-	public void addCollaborator(User user);
+	public void addCollaborator(Collaborator user);
 
 	public void deleteCollaborator(Integer userId);
 

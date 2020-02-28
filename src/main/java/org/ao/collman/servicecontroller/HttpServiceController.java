@@ -2,7 +2,7 @@ package org.ao.collman.servicecontroller;
 
 import javax.validation.Valid;
 
-import org.ao.collman.model.User;
+import org.ao.collman.model.dto.Collaborator;
 import org.ao.collman.requestprocessor.RequestProcessorInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,20 +32,20 @@ public class HttpServiceController {
 	}
 
 	@RequestMapping(path = "/addcollab", method = RequestMethod.POST)
-	public String addCollaborator(@Valid User user, BindingResult result, Model model) {
+	public String addCollaborator(@Valid Collaborator collaborator, BindingResult result, Model model) {
 		log.info("addCollaborator request received");
 		if (result.hasErrors()) {
 			return "add-collab";
 		}
 		try {
-			services.addCollaborator(user);
-			Iterable<User> users = services.listAllCollaborators();
-			model.addAttribute("Users", users);
+			services.addCollaborator(collaborator);
+			Iterable<Collaborator> collaboratorList = services.listAllCollaborators();
+			model.addAttribute("Collaborators", collaboratorList);
 			return "list-collabs";
 		} catch (Exception e) {
 			// TODO error page
-			Iterable<User> users = services.listAllCollaborators();
-			model.addAttribute("Users", users);
+			Iterable<Collaborator> collaboratorList = services.listAllCollaborators();
+			model.addAttribute("Collaborators", collaboratorList);
 			return "list-collabs";
 		}
 
@@ -55,30 +55,30 @@ public class HttpServiceController {
 	public String listAllCollaborators(Model model) {
 
 		log.info("listAllCollaborator request received");
-		Iterable<User> users = services.listAllCollaborators();
-		model.addAttribute("Users", users);
+		Iterable<Collaborator> collaboratorList = services.listAllCollaborators();
+		model.addAttribute("Collaborators", collaboratorList);
 		return "list-collabs";
 	}
 
 	@GetMapping("/add")
-	public String showAddForm(User user) {
+	public String showAddForm(Collaborator collaborator) {
 		return "add-collab";
 	}
 
 	@GetMapping("/update/{id}")
 	public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-		User user = services.getCollaboratorById(id);
-		model.addAttribute("user", user);
+		Collaborator collaborator = services.getCollaboratorById(id);
+		model.addAttribute("collaborator", collaborator);
 		return "update-collab";
 		}
 
 	@PostMapping("update/{id}")
-	public String updateCollab(@PathVariable("id") Integer id, @Valid User user, BindingResult result, Model model) {
+	public String updateCollaborator(@PathVariable("id") Integer id, @Valid Collaborator collaborator, BindingResult result, Model model) {
 		if (result.hasErrors()) {
-			user.setId(id);
+			collaborator.setId(id);
 			return "update-collab";
 		}
-		services.addCollaborator(user);
+		services.addCollaborator(collaborator);
 		return "updatesuccess";
 	}
 
@@ -88,8 +88,8 @@ public class HttpServiceController {
 		log.info("deleteCollaborator request received");
 		services.deleteCollaborator(collaboratorId);
 
-		Iterable<User> users = services.listAllCollaborators();
-		model.addAttribute("Users", users);
+		Iterable<Collaborator> collaboratorList = services.listAllCollaborators();
+		model.addAttribute("Collaborators", collaboratorList);
 		return "list-collabs";
 	}
 
