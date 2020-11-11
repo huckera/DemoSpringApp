@@ -2,9 +2,10 @@ package org.ao.collman.servicecontroller;
 
 import javax.validation.Valid;
 
-import org.ao.collman.model.User;
-import org.ao.collman.services.GreetingServicesInterface;
-import org.ao.collman.services.UserServicesInterface;
+import org.ao.collman.model.dto.Collaborator;
+import org.ao.collman.requestprocessor.RequestProcessorInterface;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,121 +15,90 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-
-//class-level annotation maps a specific request path or pattern onto a controller
-//can map multiple URIs
-@RequestMapping(value = {"/aocollman", "/ao", "/collman"}) 
+@RequestMapping(value = { "/aocollman", "/ao", "/collman" }) // class-level annotation: maps a specific request path or pattern ("URI path
+																// template") onto a controller; can map multiple URIs
 public class HttpServiceController {
-	
-		
-	@Autowired
-	private UserServicesInterface userI;
 
-	// @Autowired: find automatically the bean
-	// XML: NOT OK
-	// if GreetingServices is defined as @Service, OK
 	@Autowired
-	private GreetingServicesInterface greet1;
-	
-			
+	private RequestProcessorInterface services;
+
+	private static final Logger log = LoggerFactory.getLogger(HttpServiceController.class);
+
 	@RequestMapping("/")
 	public String home() {
 		return "index";
 	}
 
-	@RequestMapping(path = "/addcollab", method = { RequestMethod.GET, RequestMethod.POST })
-	public String addCollab(@Valid User user, BindingResult result, Model model) {
-
+	@RequestMapping(path = "/addcollab", method = RequestMethod.POST)
+	public String addCollaborator(@Valid Collaborator collaborator, BindingResult result, Model model) {
+		log.info("Request received addcollaborator: " + collaborator);
 		if (result.hasErrors()) {
 			return "add-collab";
 		}
+		try {
+			log.debug("Calling service addcollaborator: " + collaborator);
+			services.addCollaborator(collaborator);
+			log.info("Start displaying collaborator list");
+			log.debug("Calling service listcollaborator");
+			Iterable<Collaborator> collaboratorList = services.listAllCollaborators();
+			model.addAttribute("Collaborators", collaboratorList);
+			return "list-collabs";
+		} catch (Exception e) {
+			// TODO addCollaborator error page
+			Iterable<Collaborator> collaboratorList = services.listAllCollaborators();
+			model.addAttribute("Collaborators", collaboratorList);
+			return "list-collabs";
+		}
 
-		userI.save(user);
-		Iterable<User> users = userI.getAllUsers(model);
-		model.addAttribute("Users", users);
-		return "list-collabs";
 	}
 
 	@GetMapping(path = "/listcolls")
-	public String listCollabs(Model model) {
-		Iterable<User> users = userI.getAllUsers(model);
-		model.addAttribute("Users", users);
+	public String listAllCollaborators(Model model) {
+
+		log.info("Request received listAllCollaborator");
+		log.debug("Calling service listAllcollaborator");
+		Iterable<Collaborator> collaboratorList = services.listAllCollaborators();
+		model.addAttribute("Collaborators", collaboratorList);
 		return "list-collabs";
 	}
 
 	@GetMapping("/add")
-	public String showAddForm(User user) {
+	public String showAddForm(Collaborator collaborator) {
 		return "add-collab";
 	}
 
-	@GetMapping("/edit/{id}")
+	@GetMapping("/update/{id}")
 	public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-		User users = userI.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid student Id:" + id));
-		model.addAttribute("user", users);
+		Collaborator collaborator = services.getCollaboratorById(id);
+		model.addAttribute("collaborator", collaborator);
 		return "update-collab";
 		}
 
 	@PostMapping("update/{id}")
-	public String updateCollab(@PathVariable("id") Integer id, @Valid User user, BindingResult result, Model model) {
+	public String updateCollaborator(@PathVariable("id") Integer id, @Valid Collaborator updatedCollaborator, BindingResult result, Model model) {
+		log.info("Request received updateCollaborator with id: " + id + ", collaborator changes: " + updatedCollaborator);
 		if (result.hasErrors()) {
-			user.setId(id);
+			updatedCollaborator.setId(id);
 			return "update-collab";
 		}
-		userI.save(user);
+		log.debug("Calling service addcollaborator: " + updatedCollaborator);
+		services.addCollaborator(updatedCollaborator);
 		return "updatesuccess";
 	}
 
 	@GetMapping("delete/{id}")
-	public String deleteCollab(@PathVariable("id") Integer id, Model model) {
-		userI.deleteById(id);
-		Iterable<User> users = userI.getAllUsers(model);
-		model.addAttribute("Users", users);
+	public String deleteCollaborators(@PathVariable("id") Integer collaboratorId, Model model) {
+
+		log.info("Request received deleteCollaborator with id: " + collaboratorId);
+		log.debug("Calling service deleteCollaborator");
+		services.deleteCollaborator(collaboratorId);
+
+		Iterable<Collaborator> collaboratorList = services.listAllCollaborators();
+		model.addAttribute("Collaborators", collaboratorList);
 		return "list-collabs";
 	}
 
-//old versions
-
-	@GetMapping(path = "/viewallcollold")
-		public @ResponseBody Iterable<User> getAllUsers(Model model) {
-			// This returns a JSON or XML with the users
-			
-			return userI.getAllUsers(model);
-		}
-			
-	@GetMapping(path = "/addcollold") // Map ONLY GET Requests
-	public @ResponseBody String addNewUser(@RequestParam String name, @RequestParam String email, Model model) {
-		// @ResponseBody means the returned String is the response, not a view name
-		// @RequestParam means it is a parameter from the GET or POST request
-
-		return userI.addNewUser(name, email, model);
-	}
-
-//greetings
-
-	// method-level annotation maps a specific request path or pattern onto a
-	// controller
-	@RequestMapping(value = "/greeting", method = RequestMethod.GET) // =@GetMapping("/greeting") from Spring 4.3 ("method level variants" =
-																		// "composed annotations")
-	public String greeting(@RequestParam(name = "name", required = false, defaultValue = "World") String name, Model model) { // view template, Thymeleaf
-
-		// AbstractApplicationContext context = new
-		// ClassPathXmlApplicationContext("BeansFactory.xml"); //IoC container created,
-		// metadata is in XML
-		// GreetingServicesInterface greet1 =
-		// (GreetingServicesInterface)context.getBean("greet1"); //greet1 bean created
-		System.out.println("ServiceController received request: " + greet1);
-		return greet1.greeting(name, model);
-	}
-
-	@RequestMapping(value = "/greeting", method = RequestMethod.GET, params = "name=Adam") // invoked on a specific parameter received
-	public String greetingAdam(@RequestParam(name = "name", required = false, defaultValue = "World") String name, Model model) { // view template, Thymeleaf
-		System.out.println("ServiceController received request: " + greet1);
-		return greet1.greetingVIP(name, model);
-	}
-		
 }
 
