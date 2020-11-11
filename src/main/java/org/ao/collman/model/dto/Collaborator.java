@@ -1,4 +1,4 @@
-package org.ao.collman.model;
+package org.ao.collman.model.dto;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,8 +9,9 @@ import javax.persistence.Table;
 @Entity // This tells Hibernate to make a table out of this class;
 		// parameter "name" assigns the logical name
 @Table(name = "Collaborator") // Sets the table name (default table name is the POJO class name)
-public class User {
-    @Id
+public class Collaborator {
+
+	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
@@ -18,11 +19,11 @@ public class User {
 
     private String email;
 
-	public User() {
+	public Collaborator() {
 
 	}
 
-	public User(Integer id, String name, String email) {
+	public Collaborator(Integer id, String name, String email) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -53,5 +54,9 @@ public class User {
 		this.email = email;
 	}
 
+	@Override
+	public String toString() {
+		return "Collaborator [id=" + id + ", name=" + name + ", email=" + email + "]";
+	}
 
 }

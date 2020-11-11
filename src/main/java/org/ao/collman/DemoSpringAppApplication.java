@@ -21,7 +21,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 @SpringBootApplication (scanBasePackages= {"org.ao.collman.services", "org.ao.collman.servicecontroller", "org.ao.collman.model"})
-@ComponentScan ({"org.ao.collman.services", "org.ao.collman.servicecontroller", "org.ao.collman.model"})
+@ComponentScan({ "org.ao.collman" })
 @EntityScan ({"org.ao.collman.services", "org.ao.collman.servicecontroller", "org.ao.collman.model"})
 public class DemoSpringAppApplication {
 
