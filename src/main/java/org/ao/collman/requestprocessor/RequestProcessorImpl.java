@@ -12,12 +12,12 @@ public class RequestProcessorImpl implements RequestProcessorInterface {
 
 	private static final Logger log = LoggerFactory.getLogger(RequestProcessorImpl.class);
 
-	@Autowired // find automatically the bean
-	private CollaboratorServiceInterface userI;
+	@Autowired
+	private CollaboratorServiceInterface collabServiceI;
 
 	@Override
 	public void deleteCollaborator(Integer userId) {
-		userI.deleteById(userId);
+		collabServiceI.deleteCollaborator(userId);
 		log.info("Collaborator deleted from the database with Id: " + userId.toString());
 
 	}
@@ -25,20 +25,19 @@ public class RequestProcessorImpl implements RequestProcessorInterface {
 	@Override
 	public Iterable<Collaborator> listAllCollaborators() {
 
-		Iterable<Collaborator> users = userI.getAllUsers();
+		Iterable<Collaborator> users = collabServiceI.listCollaborators();
 		return users;
 
 	}
 
 	@Override
-	public void addCollaborator(Collaborator user) {
-		userI.save(user);
-		log.info("Collaborator saved into the database: " + user.toString());
+	public void addCollaborator(Collaborator collaborator) {
+		collabServiceI.addCollaborator(collaborator);
 	}
 
 	@Override
 	public Collaborator getCollaboratorById(Integer id) {
-		Collaborator user = userI.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid student Id:" + id));
+		Collaborator user = collabServiceI.getCollaborator(id).orElseThrow(() -> new IllegalArgumentException("Invalid student Id:" + id));
 		return user;
 	}
 

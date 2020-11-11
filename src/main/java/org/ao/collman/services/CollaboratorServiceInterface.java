@@ -4,20 +4,19 @@ import java.util.Optional;
 
 import org.ao.collman.model.dto.Collaborator;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 @Service
 public interface CollaboratorServiceInterface {
 
 	
-	public String addNewUser(String name, String email, Model model); 
+	public String addCollaborator(Collaborator collaborator);
 	
-	public Iterable<Collaborator> getAllUsers();
+	public Iterable<Collaborator> listCollaborators();
 	
-	public Optional<Collaborator> findById(Integer id);
+	public Optional<Collaborator> getCollaborator(Integer id);
 
-	public void deleteById(Integer id);
+	public void deleteCollaborator(Integer id);
 
-	public Collaborator save(Collaborator user);
+	public Collaborator saveCollaborator(Collaborator collaborator);
 
 }

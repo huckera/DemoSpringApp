@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-//class-level annotation: maps a specific request path or pattern ("URI path template") onto a controller; can map multiple URIs
-@RequestMapping(value = {"/aocollman", "/ao", "/collman"}) 
+@RequestMapping(value = { "/aocollman", "/ao", "/collman" }) // class-level annotation: maps a specific request path or pattern ("URI path
+																// template") onto a controller; can map multiple URIs
 public class HttpServiceController {
 
-	@Autowired // find automatically the bean
+	@Autowired
 	private RequestProcessorInterface services;
 
 	private static final Logger log = LoggerFactory.getLogger(HttpServiceController.class);
@@ -33,17 +33,20 @@ public class HttpServiceController {
 
 	@RequestMapping(path = "/addcollab", method = RequestMethod.POST)
 	public String addCollaborator(@Valid Collaborator collaborator, BindingResult result, Model model) {
-		log.info("addCollaborator request received");
+		log.info("Request received addcollaborator: " + collaborator);
 		if (result.hasErrors()) {
 			return "add-collab";
 		}
 		try {
+			log.debug("Calling service addcollaborator: " + collaborator);
 			services.addCollaborator(collaborator);
+			log.info("Start displaying collaborator list");
+			log.debug("Calling service listcollaborator");
 			Iterable<Collaborator> collaboratorList = services.listAllCollaborators();
 			model.addAttribute("Collaborators", collaboratorList);
 			return "list-collabs";
 		} catch (Exception e) {
-			// TODO error page
+			// TODO addCollaborator error page
 			Iterable<Collaborator> collaboratorList = services.listAllCollaborators();
 			model.addAttribute("Collaborators", collaboratorList);
 			return "list-collabs";
@@ -54,7 +57,8 @@ public class HttpServiceController {
 	@GetMapping(path = "/listcolls")
 	public String listAllCollaborators(Model model) {
 
-		log.info("listAllCollaborator request received");
+		log.info("Request received listAllCollaborator");
+		log.debug("Calling service listAllcollaborator");
 		Iterable<Collaborator> collaboratorList = services.listAllCollaborators();
 		model.addAttribute("Collaborators", collaboratorList);
 		return "list-collabs";
@@ -73,19 +77,22 @@ public class HttpServiceController {
 		}
 
 	@PostMapping("update/{id}")
-	public String updateCollaborator(@PathVariable("id") Integer id, @Valid Collaborator collaborator, BindingResult result, Model model) {
+	public String updateCollaborator(@PathVariable("id") Integer id, @Valid Collaborator updatedCollaborator, BindingResult result, Model model) {
+		log.info("Request received updateCollaborator with id: " + id + ", collaborator changes: " + updatedCollaborator);
 		if (result.hasErrors()) {
-			collaborator.setId(id);
+			updatedCollaborator.setId(id);
 			return "update-collab";
 		}
-		services.addCollaborator(collaborator);
+		log.debug("Calling service addcollaborator: " + updatedCollaborator);
+		services.addCollaborator(updatedCollaborator);
 		return "updatesuccess";
 	}
 
 	@GetMapping("delete/{id}")
 	public String deleteCollaborators(@PathVariable("id") Integer collaboratorId, Model model) {
 
-		log.info("deleteCollaborator request received");
+		log.info("Request received deleteCollaborator with id: " + collaboratorId);
+		log.debug("Calling service deleteCollaborator");
 		services.deleteCollaborator(collaboratorId);
 
 		Iterable<Collaborator> collaboratorList = services.listAllCollaborators();
