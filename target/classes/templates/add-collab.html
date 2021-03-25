@@ -1,40 +1,24 @@
-!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!-- HTML5 -->
+<!DOCTYPE html>
+<!-- XML namespace -->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+	<head>
+	    <title>Add Collaborator</title>
+	    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	    <meta content="width=device-width, initial-scale=1, ie=edge">
+	    <meta name="viewport">
+	    <link th:href="@{/css/mystyle.css}" rel="stylesheet" />
+	</head>
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Add User</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <link rel="stylesheet" href="../css/shards.min.css"> -->
-</head>
-
-<body>
-    <div class="container my-5">
-        <h3> Add Collaborator</h3>
-        <div class="card">
-            <div class="card-body">
-                <div class="col-md-10">
-                    <form action="#" th:action="@{/ao/addcollab}" th:object="${collaborator}" method="post">
-                        <div class="row">
-                            <div class="form-group col-md-8">
-                                <label for="name" class="col-form-label">Name</label> <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Name"> <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-md-8">
-                                <label for="email" class="col-form-label">Email</label> <input type="text" th:field="*{email}" class="form-control" id="email" placeholder="Email"> <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <input type="submit" class="btn btn-primary" value="Add Collaborator">
-                            </div>
-
-                            <div class="form-group col-md-8"></div>
-
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
+	<body>
+		<h3>Add Collaborator</h3>
+	    <form action="#" th:action="@{/ao/addcollab}" th:object="${collaborator}" method="post">
+	        <label for="name" class="col-form-label">Name</label> 
+	        <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Name"> <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>
+	        <label for="email" class="col-form-label">Email</label>
+	        <input type="text" th:field="*{email}" class="form-control" id="email" placeholder="Email"> <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
+	        <input type="submit" class="btn btn-primary" value="Add Collaborator">
+        </form>
+	</body>
 
 </html>
