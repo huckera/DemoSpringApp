@@ -16,9 +16,13 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<spring-boot.version>2.1.4-RELEASE</spring-boot.version>
+		<springdoc.version>1.6.9</springdoc.version>
 	</properties>
 
 	<dependencies>
+
+		<!-- Basic Spring dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
@@ -30,9 +34,7 @@
             <optional>true</optional>
         </dependency>
 
-	
-		<!-- Web dependencies -->
-	
+		<!-- Web Spring dependencies -->	
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -42,34 +44,37 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
  		
- 		<!-- JPA Data (We are going to use Repositories, Entities, Hibernate, etc...) -->
-
+ 		<!-- JPA Spring dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-
-        <!-- Use MySQL Connector-J -->
-
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-
 		<dependency>
   			<groupId>org.postgresql</groupId>
   			<artifactId>postgresql</artifactId>
   		</dependency> 
 
-    </dependencies>
-
+		<!-- OpenAPI documentation-->
+		<dependency>
+      		<groupId>org.springdoc</groupId>
+      		<artifactId>springdoc-openapi-ui</artifactId>
+      		<version>${springdoc.version}</version>
+   		</dependency>
+   	</dependencies>
 
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
+   				<groupId>org.springframework.boot</groupId>
+   				<artifactId>spring-boot-maven-plugin</artifactId>
+   				<configuration>
+      				<jvmArguments>-Dspring.application.admin.enabled=true -Dspring.profiles.active=default</jvmArguments>
+   				</configuration>
+  			</plugin>
 		</plugins>
 	</build>
 
