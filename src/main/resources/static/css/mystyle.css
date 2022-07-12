@@ -1,0 +1,52 @@
+@charset "UTF-8";
+body {
+  background-color: lightblue;
+}
+
+h1 {
+	color: navy;
+	/*margin-left: 20px;*/
+	text-align: center;
+}
+
+h2 {
+	color: navy;
+	text-align: center;
+}
+
+h3 {
+	color: navy;
+	text-align: left;
+}
+
+h4 {
+	color: navy;
+	text-align: left;
+}
+
+p {
+	font-family: "Times New Roman", Times, serif;
+	font-style: normal;
+	font-size: 16px;
+}
+
+h6 {
+	color: navy;
+	text-align: left;
+	font-size: 32px;
+}
+
+table { 
+  width: 40%;
+  text-align: left;
+  background: lightblue url('https://img.pngio.com/stars-transparent-background-vector-abstract-line-stars-png-transparent-real-stars-png-stars-blue-shooting-stars-png-360_360.png') repeat;
+  border-collapse: collapse;
+  border: 1px solid #000000;
+  }
+td, th { 
+  padding:15px;
+  text-align: left;
+  background: lightblue;
+  border: 1px solid #000000;
+  }
+  
