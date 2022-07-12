@@ -1,5 +1,7 @@
 package org.ao.collman.servicecontroller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.ao.collman.model.dto.Collaborator;
@@ -7,18 +9,22 @@ import org.ao.collman.requestprocessor.RequestProcessorInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@RequestMapping(value = {"/ao", "/aocollman"}) // class-level annotation: maps a specific request path or pattern ("URI path
-															// template") onto a controller; can map multiple URIs
+@RestController
+@RequestMapping(value = "/collab") // class-level annotation: maps a specific request path or pattern ("URI path
+														// template") onto a controller; can map multiple URIs
 public class CollaboratorController {
 
 	@Autowired
@@ -26,55 +32,33 @@ public class CollaboratorController {
 
 	private static final Logger log = LoggerFactory.getLogger(CollaboratorController.class);
 
-	@RequestMapping("/")
-	public String home() {
-		return "index";
-	}
-
-	@RequestMapping(path = "/addcollab", method = RequestMethod.POST)
-	public String addCollaborator(@Valid Collaborator collaborator, BindingResult result, Model model) {
+	@RequestMapping(path = "/add", method = RequestMethod.POST, produces = {"application/json"})
+	public ResponseEntity<List<Collaborator>> addCollaborator(@RequestBody Collaborator collaborator) {
 		log.info("Request received addcollaborator: " + collaborator);
-		if (result.hasErrors()) {
-			return "add-collab";
-		}
 		try {
 			log.debug("Calling service addcollaborator: " + collaborator);
 			services.addCollaborator(collaborator);
+
 			log.info("Start displaying collaborator list");
 			log.debug("Calling service listcollaborator");
-			Iterable<Collaborator> collaboratorList = services.listAllCollaborators();
-			model.addAttribute("Collaborators", collaboratorList);
-			return "list-collabs";
+			List<Collaborator> collaboratorList = (List<Collaborator>) services.listAllCollaborators();
+			return new ResponseEntity<List<Collaborator>>(collaboratorList, HttpStatus.OK);
 		} catch (Exception e) {
 			// TODO addCollaborator error page
-			Iterable<Collaborator> collaboratorList = services.listAllCollaborators();
-			model.addAttribute("Collaborators", collaboratorList);
-			return "list-collabs";
+			List<Collaborator> collaboratorList = (List<Collaborator>) services.listAllCollaborators();
+			return new ResponseEntity<List<Collaborator>>(collaboratorList, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}
 
-	@GetMapping(path = "/listcolls")
-	public String listAllCollaborators(Model model) {
+	@GetMapping(path = "/list", produces = {"application/json"})
+	public ResponseEntity<List<Collaborator>> listAllCollaborators(Model model) {
 
 		log.info("Request received listAllCollaborator");
 		log.debug("Calling service listAllcollaborator");
-		Iterable<Collaborator> collaboratorList = services.listAllCollaborators();
-		model.addAttribute("Collaborators", collaboratorList);
-		return "list-collabs";
+		List<Collaborator> collaboratorList = (List<Collaborator>) services.listAllCollaborators();
+		return new ResponseEntity<List<Collaborator>>(collaboratorList, HttpStatus.OK);
 	}
-
-	@GetMapping("/add")
-	public String showAddForm(Collaborator collaborator) {
-		return "add-collab";
-	}
-
-	@GetMapping("/update/{id}")
-	public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-		Collaborator collaborator = services.getCollaboratorById(id);
-		model.addAttribute("collaborator", collaborator);
-		return "update-collab";
-		}
 
 	@PostMapping("update/{id}")
 	public String updateCollaborator(@PathVariable("id") Integer id, @Valid Collaborator updatedCollaborator, BindingResult result, Model model) {
@@ -88,7 +72,7 @@ public class CollaboratorController {
 		return "updatesuccess";
 	}
 
-	@GetMapping("delete/{id}")
+	@DeleteMapping("delete/{id}")
 	public String deleteCollaborators(@PathVariable("id") Integer collaboratorId, Model model) {
 
 		log.info("Request received deleteCollaborator with id: " + collaboratorId);
