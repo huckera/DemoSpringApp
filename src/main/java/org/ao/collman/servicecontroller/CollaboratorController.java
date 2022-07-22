@@ -48,7 +48,6 @@ public class CollaboratorController {
 			List<Collaborator> collaboratorList = (List<Collaborator>) services.listAllCollaborators();
 			return new ResponseEntity<List<Collaborator>>(collaboratorList, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
 	}
 
 	@GetMapping(path = "/list", produces = {"application/json"})
