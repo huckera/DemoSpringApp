@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Add User</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link rel="stylesheet" href="../css/shards.min.css"> -->
+</head>
+<body>
+    <div class="container my-5">
+        <h3> Add Collaborator</h3>
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-10">
+                    <form action="/collab/add" method="post">
+                        <div class="row">
+                            <div class="form-group col-md-8">
+                                <label for="name" class="col-form-label">Name</label> 
+                                <input type="text" id="name" name="name">
+                            </div>
+                            <div class="form-group col-md-8">
+                                <label for="email" class="col-form-label">Email</label> 
+                                <input type="text" id="email" name="email">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="submit" value="Add Collaborator">
+                            </div>
+                            <div class="form-group col-md-8"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
