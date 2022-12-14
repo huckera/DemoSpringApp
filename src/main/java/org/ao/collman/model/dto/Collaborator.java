@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity // This tells Hibernate to make a table out of this class;
 		// parameter "name" assigns the logical name
@@ -15,8 +16,10 @@ public class Collaborator {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
+	@NotBlank(message = "Name is mandatory")
     private String name;
 
+	@NotBlank(message = "Email is mandatory")
     private String email;
 
 	public Collaborator() {
