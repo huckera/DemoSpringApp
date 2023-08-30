@@ -17,4 +17,17 @@ When the server is operational, API documentation is available at the following 
 
 # Deployment
 
-TBD
+## Prerequisites
+
+### Database
+
+1. Deploy a database of your choice. 
+
+The following docker command can be used:
+
+`docker run -p 33060:3306 --name <container-name> -e MYSQL_ROOT_PASSWORD=<password> -d mysql:latest`
+
+In this case the database can be reached at localhost:33060.
+
+- Create schema `alphacollab`
+
