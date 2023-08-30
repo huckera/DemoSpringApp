@@ -1,1 +1,0 @@
-web: java -jar target/DemoSpringApp-1.0.0-RELEASE.jar
